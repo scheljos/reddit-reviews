@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # reddit-reviews specific
-praw.ini
+
