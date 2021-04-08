@@ -19,13 +19,30 @@ user_agent="reddit-reviews sentiment analysis by u/Lost_You4257",
 
 # Product to be searched
 # TODO: This should be a variable based on web-app input
-product = "pixel 4a"
+product = "x1 carbon"
 
 # TODO: Loop through the submissions, calculating polarity of title & comments
 # Weight text with more upvotes higher than text with less upvotes
 # Find the average polarity, apply it to a scale for a rating
-for submission in reddit.subreddit("all").search(product):
-    print(submission.title)
+i = 0
+mySum = 0
+for submission in reddit.subreddit("all").search(product, limit=None):
+    titleBlob = TextBlob(submission.title)
+    polarityVal = titleBlob.sentiment.polarity
+    mySum += polarityVal
+    i += 1
+    for comment in submission.comments:
+        if hasattr(comment, "body"):
+            # if product in comment.body:
+            commentBlob = TextBlob(comment.body[:280])
+            polarityVal = commentBlob.sentiment.polarity
+            mySum += polarityVal
+            i += 1
+
+
+print(product + ": " + str(mySum / i)) if i != 0 else print("No results found for this topic")
+
+
 
 # TODO: Communicate this rating to the front end
 
